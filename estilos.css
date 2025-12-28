@@ -23,7 +23,7 @@
 }
 
 body{
-    background-color: #f1f5f9;
+    background-color: #D4DDEE;
     /* background-color: #f5f5f5; */
     /* background-color: #eef3f8; */
     /* background-color: #0f172a; */
@@ -33,6 +33,11 @@ body{
 
 #wrapper{
     max-width: 1600px;
+}
+
+h1{
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
 }
 
 /*
@@ -142,15 +147,6 @@ Links
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.tabela-periodos tbody tr:nth-child(even) {
-    /* background-color: #f9fafb; */
-}
-
-.tabela-periodos tbody tr:hover {
-    /* background-color: #eef2ff;
-    box-shadow: inset 4px 0 0 #6366f1; */
-}
-
 .tabela-periodos tbody td {
     padding: 12px 16px;
     color: #1f2933;
@@ -189,4 +185,59 @@ Links
     .tabela-periodos tr {
         white-space: nowrap;
     }
+}
+
+/* Gráfico */
+
+.grafico-container {
+  margin-bottom: 30px;
+  overflow-x: auto;
+}
+
+svg .VMC {
+  fill: var(--verde-vmc);
+}
+
+svg .IMC {
+  fill: var(--amarelo-imc);
+}
+
+svg .DEGRADADO {
+  fill: var(--laranja-degradado);
+}
+
+svg .QGO {
+  fill: var(--vermelho-qgo);
+}
+
+
+#btn-topo {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  height: 44px;
+  border: none;
+  border-radius: 22px;
+  background-color: #1f2933;
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+#btn-topo.visivel {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#btn-topo:hover {
+  background-color: #374151;
 }

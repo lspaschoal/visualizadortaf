@@ -21,7 +21,6 @@ function gerarTabelas(){
   div_tabelas.innerHTML = '';
   const view = new View();
   Object.values(TAFS).forEach(taf => {
-    view.gerarBotaoLink(taf.icao);
     div_tabelas.appendChild(view.gerarTabelaPeriodos(taf));
   });
 }
@@ -36,12 +35,41 @@ function atualizarTabela(icao){
 function mudarCondicao(icao,index_periodo,nova_condicao){
   TAFS[icao].periodos[index_periodo].condicao = nova_condicao;
   atualizarTabela(icao);
+  gerarGrafico();
+}
+
+function gerarGrafico(){
+  const div_grafico = document.getElementById('grafico');
+  div_grafico.innerHTML = '';
+  const view = new View();
+  div_grafico.appendChild(view.gerarGrafico(Object.values(TAFS)));
 }
 
 async function init(){
   const tafs = await getTafsRedemet();
   armazenarTafs(tafs);
+  gerarGrafico();
   gerarTabelas();
 }
 
 init();
+
+const btnTopo = document.getElementById("btn-topo");
+
+// mostrar / esconder conforme scroll
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 200) {
+    btnTopo.classList.add("visivel");
+  } else {
+    btnTopo.classList.remove("visivel");
+  }
+});
+
+// voltar ao topo
+btnTopo.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+

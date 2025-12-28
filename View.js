@@ -262,7 +262,7 @@ class View {
 
     const opt_degradado = document.createElement('option');
     opt_degradado.textContent = "DEGRADADO";
-    if (condicao === 'DERADADO') opt_degradado.selected = true;
+    if (condicao === 'DEGRADADO') opt_degradado.selected = true;
     select.appendChild(opt_degradado);
 
     const opt_qgo = document.createElement('option');
@@ -273,12 +273,208 @@ class View {
     return select;
   }
 
-  gerarBotaoLink(icao){
+  gerarBotaoLink(icao) {
     const li = document.createElement('li');
     const a = document.createElement('a');
     a.textContent = icao;
-    a.setAttribute('href',`#${icao}`);
+    a.setAttribute('href', `#${icao}`);
     li.appendChild(a);
     document.getElementById('links').firstElementChild.appendChild(li);
   }
+
+gerarGrafico(tafs) {
+  const SVG_WIDTH = 1600;
+  const LEFT_MARGIN = 120;
+  const RIGHT_MARGIN = 20;
+  const TOP_MARGIN = 50;
+  const ROW_HEIGHT = 28;
+  const X_AXIS_HEIGHT = 40;
+
+  const ICAO_BOX_WIDTH = 90;
+  const ICAO_BOX_HEIGHT = ROW_HEIGHT - 4;
+
+  // --------------------------------
+  // 1) intervalo global de tempo
+  // --------------------------------
+  let inicioGlobal = null;
+  let fimGlobal = null;
+
+  tafs.forEach(taf => {
+    taf.periodos.forEach(p => {
+      if (!inicioGlobal || p.data_hora_inicio < inicioGlobal) {
+        inicioGlobal = p.data_hora_inicio;
+      }
+      if (!fimGlobal || p.data_hora_fim > fimGlobal) {
+        fimGlobal = p.data_hora_fim;
+      }
+    });
+  });
+
+  const duracaoTotal = fimGlobal - inicioGlobal;
+  const larguraUtil = SVG_WIDTH - LEFT_MARGIN - RIGHT_MARGIN;
+
+  // --------------------------------
+  // 2) SVG base
+  // --------------------------------
+  const height =
+    TOP_MARGIN +
+    X_AXIS_HEIGHT +
+    tafs.length * ROW_HEIGHT +
+    20;
+
+  const svg = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "svg"
+  );
+  svg.setAttribute("width", SVG_WIDTH);
+  svg.setAttribute("height", height);
+  svg.classList.add("grafico-taf");
+
+  const bg = document.createElementNS(svg.namespaceURI, "rect");
+  bg.setAttribute("x", 0);
+  bg.setAttribute("y", 0);
+  bg.setAttribute("width", SVG_WIDTH);
+  bg.setAttribute("height", height);
+  bg.setAttribute("fill", "#fff");
+  svg.appendChild(bg);
+
+  // --------------------------------
+  // 3) eixo X – data em cima / hora embaixo
+  // --------------------------------
+  let horaAtual = new Date(inicioGlobal);
+  horaAtual.setUTCMinutes(0, 0, 0);
+  let ultimaData = "";
+
+  while (horaAtual < fimGlobal) {
+    const proximaHora = new Date(horaAtual);
+    proximaHora.setUTCHours(proximaHora.getUTCHours() + 1);
+
+    const xInicio =
+      LEFT_MARGIN +
+      ((horaAtual - inicioGlobal) / duracaoTotal) * larguraUtil;
+
+    const xFim =
+      LEFT_MARGIN +
+      ((proximaHora - inicioGlobal) / duracaoTotal) * larguraUtil;
+
+    const xCentro = (xInicio + xFim) / 2;
+
+    const linha = document.createElementNS(svg.namespaceURI, "line");
+    linha.setAttribute("x1", xInicio);
+    linha.setAttribute("x2", xInicio);
+    linha.setAttribute("y1", TOP_MARGIN);
+    linha.setAttribute("y2", height - 10);
+    linha.setAttribute("stroke", "#ddd");
+    linha.setAttribute("stroke-width", "1");
+    svg.appendChild(linha);
+
+    const dataStr = this.formatarDataUTC(horaAtual).split(" ")[0];
+    if (dataStr !== ultimaData) {
+      const labelData = document.createElementNS(svg.namespaceURI, "text");
+      labelData.setAttribute("x", xCentro);
+      labelData.setAttribute("y", TOP_MARGIN - 28);
+      labelData.setAttribute("text-anchor", "middle");
+      labelData.setAttribute("font-size", "12");
+      labelData.setAttribute("font-family", "sans-serif");
+      labelData.textContent = dataStr;
+      svg.appendChild(labelData);
+      ultimaData = dataStr;
+    }
+
+    const hora = String(horaAtual.getUTCHours()).padStart(2, "0");
+    const labelHora = document.createElementNS(svg.namespaceURI, "text");
+    labelHora.setAttribute("x", xCentro);
+    labelHora.setAttribute("y", TOP_MARGIN - 10);
+    labelHora.setAttribute("text-anchor", "middle");
+    labelHora.setAttribute("font-size", "11");
+    labelHora.setAttribute("font-family", "sans-serif");
+    labelHora.textContent = `${hora}Z`;
+    svg.appendChild(labelHora);
+
+    horaAtual = proximaHora;
+  }
+
+  // --------------------------------
+  // 4) linhas por ICAO (botões)
+  // --------------------------------
+  tafs.forEach((taf, index) => {
+    const y =
+      TOP_MARGIN +
+      X_AXIS_HEIGHT +
+      index * ROW_HEIGHT;
+
+    const link = document.createElementNS(svg.namespaceURI, "a");
+    link.setAttributeNS(
+      "http://www.w3.org/1999/xlink",
+      "xlink:href",
+      `#${taf.icao}`
+    );
+    link.setAttribute("cursor", "pointer");
+
+    // fundo do "botão"
+    const rectIcao = document.createElementNS(svg.namespaceURI, "rect");
+    rectIcao.setAttribute("x", 10);
+    rectIcao.setAttribute("y", y);
+    rectIcao.setAttribute("width", ICAO_BOX_WIDTH);
+    rectIcao.setAttribute("height", ICAO_BOX_HEIGHT);
+    rectIcao.setAttribute("rx", 4);
+    rectIcao.setAttribute("ry", 4);
+    rectIcao.setAttribute("fill", "#1f2933");
+
+    // texto ICAO
+    const text = document.createElementNS(svg.namespaceURI, "text");
+    text.setAttribute("x", 10 + ICAO_BOX_WIDTH / 2);
+    text.setAttribute("y", y + ICAO_BOX_HEIGHT / 2 + 4);
+    text.setAttribute("text-anchor", "middle");
+    text.setAttribute("font-size", "12");
+    text.setAttribute("font-family", "sans-serif");
+    text.setAttribute("fill", "#ffffff");
+    text.textContent = taf.icao;
+
+    link.appendChild(rectIcao);
+    link.appendChild(text);
+    svg.appendChild(link);
+
+    // períodos
+    taf.periodos.forEach(periodo => {
+      const xInicio =
+        LEFT_MARGIN +
+        ((periodo.data_hora_inicio - inicioGlobal) /
+          duracaoTotal) *
+          larguraUtil;
+
+      const largura =
+        ((periodo.data_hora_fim - periodo.data_hora_inicio) /
+          duracaoTotal) *
+        larguraUtil;
+
+      const rect = document.createElementNS(svg.namespaceURI, "rect");
+      rect.setAttribute("x", xInicio);
+      rect.setAttribute("y", y);
+      rect.setAttribute("width", Math.max(largura, 1));
+      rect.setAttribute("height", ROW_HEIGHT - 4);
+      rect.classList.add(periodo.condicao);
+
+      const title = document.createElementNS(svg.namespaceURI, "title");
+      title.textContent =
+        `${taf.icao}\n` +
+        `${this.formatarDataUTC(periodo.data_hora_inicio)} → ` +
+        `${this.formatarDataUTC(periodo.data_hora_fim)}\n` +
+        `Condição: ${periodo.condicao}`;
+      rect.appendChild(title);
+
+      svg.appendChild(rect);
+    });
+  });
+
+  // --------------------------------
+  // 5) wrapper
+  // --------------------------------
+  const container = document.createElement("div");
+  container.classList.add("grafico-container");
+  container.appendChild(svg);
+
+  return container;
+}
+
 }
