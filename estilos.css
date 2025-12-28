@@ -1,0 +1,128 @@
+:root {
+  --verde-vmc: #92d050;
+  --amarelo-imc: #fee977;
+  --laranja-degradado: #ffa048;
+  --vermelho-qgo: #e60101;
+  --cinza-indisponivel: #bfbfbf;
+}
+
+.VMC{
+    background-color: var(--verde-vmc);
+}
+
+.IMC{
+    background-color: var(--amarelo-imc);
+}
+
+.DEGRADADO{
+    background-color: var(--laranja-degradado);
+}
+
+.QGO{
+    background-color: var(--vermelho-qgo);
+}
+
+body{
+    background-color: #f1f5f9;
+    /* background-color: #f5f5f5; */
+    /* background-color: #eef3f8; */
+    /* background-color: #0f172a; */
+}
+
+.tabela-periodos {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 14px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    margin-bottom: 32px;
+}
+
+/* ===== CABEÇALHO ===== */
+.tabela-periodos thead th {
+    text-align: center;
+}
+
+.tabela-periodos thead tr:first-child th {
+    background: linear-gradient(135deg, #1f2933, #111827);
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 14px 16px;
+}
+
+.tabela-periodos thead tr:nth-child(2) th {
+    background-color: #f3f4f6;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 16px;
+}
+
+.tabela-periodos thead tr:last-child th {
+    background-color: #111827;
+    color: #e5e7eb;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 12px 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid #374151;
+}
+
+/* ===== CORPO ===== */
+.tabela-periodos tbody tr {
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tabela-periodos tbody tr:nth-child(even) {
+    /* background-color: #f9fafb; */
+}
+
+.tabela-periodos tbody tr:hover {
+    /* background-color: #eef2ff;
+    box-shadow: inset 4px 0 0 #6366f1; */
+}
+
+.tabela-periodos tbody td {
+    padding: 12px 16px;
+    color: #1f2933;
+    vertical-align: middle;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+    text-align: center;
+}
+
+/* ===== DESTAQUES ===== */
+.tabela-periodos tbody td:first-child,
+.tabela-periodos tbody td:nth-child(2) {
+    font-weight: 600;
+    color: #111827;
+}
+
+.tabela-periodos tbody td:nth-child(3) {
+    font-family: monospace;
+    font-weight: 600;
+}
+
+/* ===== ÚLTIMA LINHA ===== */
+.tabela-periodos tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 900px) {
+    .tabela-periodos {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .tabela-periodos thead,
+    .tabela-periodos tbody,
+    .tabela-periodos tr {
+        white-space: nowrap;
+    }
+}
