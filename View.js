@@ -104,7 +104,13 @@ class View {
   }
 
   gerarTabelaPeriodos(taf) {
+    //link
+    this.gerarBotaoLink(taf.icao);
+
     //tabela
+    let div_tabela = document.createElement('div');
+    div_tabela.id = `${taf.icao}`;
+
     let tabela = document.createElement("table");
     tabela.classList.add("tabela-periodos");
 
@@ -170,9 +176,9 @@ class View {
     //body
     let tbody = document.createElement("tbody");
 
-    
 
-    taf.periodos.forEach((periodo) => {
+
+    taf.periodos.forEach((periodo, index) => {
       let tr = document.createElement("tr");
       tr.classList.add(periodo.condicao);
 
@@ -217,16 +223,22 @@ class View {
         : "";
       tr.appendChild(td_tempo_presente);
 
-      //tempo presente
-      let td_condicao = document.createElement("td");
-      td_condicao.textContent = periodo.condicao;
+      //condição
+      // let td_condicao = document.createElement("td");
+      // td_condicao.textContent = periodo.condicao;
+      // tr.appendChild(td_condicao);
+      let td_condicao = this.criarSelectCondicao(periodo.condicao);
+      td_condicao.onchange = function () {
+        mudarCondicao(taf.icao, index, this.value);
+      };
       tr.appendChild(td_condicao);
 
       tbody.appendChild(tr);
     });
 
     tabela.appendChild(tbody);
-    return tabela;
+    div_tabela.appendChild(tabela);
+    return div_tabela;
   }
 
   formatarDataUTC(data) {
@@ -237,5 +249,40 @@ class View {
     const minuto = String(data.getUTCMinutes()).padStart(2, "0");
 
     return `${dia}/${mes}/${ano} ${hora}:${minuto} UTC`;
+  }
+
+  criarSelectCondicao(condicao) {
+    const select = document.createElement('select');
+
+    const opt_vmc = document.createElement('option');
+    opt_vmc.textContent = "VMC";
+    if (condicao === 'VMC') opt_vmc.selected = true;
+    select.appendChild(opt_vmc);
+
+    const opt_imc = document.createElement('option');
+    opt_imc.textContent = "IMC";
+    if (condicao === 'IMC') opt_imc.selected = true;
+    select.appendChild(opt_imc);
+
+    const opt_degradado = document.createElement('option');
+    opt_degradado.textContent = "DEGRADADO";
+    if (condicao === 'DERADADO') opt_degradado.selected = true;
+    select.appendChild(opt_degradado);
+
+    const opt_qgo = document.createElement('option');
+    opt_qgo.textContent = "QGO";
+    if (condicao === 'QGO') opt_qgo.selected = true;
+    select.appendChild(opt_qgo);
+
+    return select;
+  }
+
+  gerarBotaoLink(icao){
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.textContent = icao;
+    a.setAttribute('href',`#${icao}`);
+    li.appendChild(a);
+    document.getElementById('links').firstElementChild.appendChild(li);
   }
 }
