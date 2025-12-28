@@ -256,7 +256,7 @@ class TAF {
     }
 
     getCondicao(visibilidade,teto){
-        console.log(visibilidade,teto,this.icao,MINIMOS[this.icao].visibilidade,MINIMOS[this.icao].teto);
+        // console.log(visibilidade,teto,this.icao,MINIMOS[this.icao].visibilidade,MINIMOS[this.icao].teto);
         if(visibilidade < MINIMOS[this.icao].visibilidade || (teto !== null && teto < MINIMOS[this.icao].teto)) return "QGO";
         if(visibilidade <= MINIMOS[this.icao].visibilidade + MARGEM_DEGRADACAO.visibilidade || (teto !== null && teto <= MINIMOS[this.icao].teto + MARGEM_DEGRADACAO.teto)) return "DEGRADADO";
         if(visibilidade < MINIMOS_VFR.visibilidade || (teto !== null && teto < MINIMOS_VFR.teto)) return "IMC";

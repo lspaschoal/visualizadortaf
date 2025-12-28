@@ -104,9 +104,6 @@ class View {
   }
 
   gerarTabelaPeriodos(taf) {
-    //link
-    this.gerarBotaoLink(taf.icao);
-
     //tabela
     let div_tabela = document.createElement('div');
     div_tabela.id = `${taf.icao}`;
@@ -184,7 +181,7 @@ class View {
 
       //data hora inicio
       let td_dt_hr_inicio = document.createElement("td");
-      console.log(taf.icao, "inicio", periodo.data_hora_inicio);
+      // console.log(taf.icao, "inicio", periodo.data_hora_inicio);
       td_dt_hr_inicio.textContent = this.formatarDataUTC(
         periodo.data_hora_inicio
       );
@@ -224,13 +221,12 @@ class View {
       tr.appendChild(td_tempo_presente);
 
       //condição
-      // let td_condicao = document.createElement("td");
-      // td_condicao.textContent = periodo.condicao;
-      // tr.appendChild(td_condicao);
-      let td_condicao = this.criarSelectCondicao(periodo.condicao);
-      td_condicao.onchange = function () {
+      const td_condicao = document.createElement("td");
+      const select_condicao = this.criarSelectCondicao(periodo.condicao);
+      select_condicao.onchange = function () {
         mudarCondicao(taf.icao, index, this.value);
       };
+      td_condicao.appendChild(select_condicao);
       tr.appendChild(td_condicao);
 
       tbody.appendChild(tr);

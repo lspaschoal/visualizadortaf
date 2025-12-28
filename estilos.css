@@ -27,6 +27,12 @@ body{
     /* background-color: #f5f5f5; */
     /* background-color: #eef3f8; */
     /* background-color: #0f172a; */
+    display: flex;
+    justify-content: center;
+}
+
+#wrapper{
+    max-width: 1600px;
 }
 
 /*
@@ -49,7 +55,7 @@ Links
 }
 
 #links li {
-    width: 75px;
+    width: 58px;
     margin: 0 10px;
 }
 
@@ -92,6 +98,11 @@ Links
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     margin-bottom: 32px;
+}
+
+.tabela-periodos th, .tabela-periodos td{
+    text-align: center;
+    vertical-align: middle;
 }
 
 /* ===== CABEÇALHO ===== */

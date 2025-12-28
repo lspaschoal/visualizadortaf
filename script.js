@@ -21,13 +21,21 @@ function gerarTabelas(){
   div_tabelas.innerHTML = '';
   const view = new View();
   Object.values(TAFS).forEach(taf => {
+    view.gerarBotaoLink(taf.icao);
     div_tabelas.appendChild(view.gerarTabelaPeriodos(taf));
   });
 }
 
+function atualizarTabela(icao){
+  const div_tabela = document.getElementById(icao);
+  div_tabela.innerHTML = '';
+  const view = new View();
+  div_tabela.appendChild(view.gerarTabelaPeriodos(TAFS[icao]));
+}
+
 function mudarCondicao(icao,index_periodo,nova_condicao){
   TAFS[icao].periodos[index_periodo].condicao = nova_condicao;
-  gerarTabelas();
+  atualizarTabela(icao);
 }
 
 async function init(){
