@@ -375,7 +375,7 @@ class View {
       labelHora.setAttribute("text-anchor", "middle");
       labelHora.setAttribute("font-size", "11");
       labelHora.setAttribute("font-family", "sans-serif");
-      if ([0, 6, 12, 18].includes(horaAtual.getHours())){
+      if ([0, 6, 12, 18].includes(horaAtual.getUTCHours())){
         labelHora.setAttribute("font-size", "14");
         labelHora.setAttribute("font-weight", "1000");
       }  
