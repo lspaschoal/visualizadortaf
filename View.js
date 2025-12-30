@@ -25,11 +25,6 @@ class View {
     th_dt_hr_inicio.textContent = "Início";
     tr_head.appendChild(th_dt_hr_inicio);
 
-    //data hora fim
-    // let th_dt_hr_fim = document.createElement('th');
-    // th_dt_hr_fim.textContent = "Fim";
-    // tr_head.appendChild(th_dt_hr_fim);
-
     //vento
     let th_vento = document.createElement("th");
     th_vento.textContent = "Vento";
@@ -314,7 +309,7 @@ gerarGrafico(tafs) {
   const larguraUtil = SVG_WIDTH - LEFT_MARGIN - RIGHT_MARGIN;
 
   // --------------------------------
-  // 2) SVG base
+  // 2) SVG base (responsivo)
   // --------------------------------
   const height =
     TOP_MARGIN +
@@ -326,10 +321,16 @@ gerarGrafico(tafs) {
     "http://www.w3.org/2000/svg",
     "svg"
   );
-  svg.setAttribute("width", SVG_WIDTH);
-  svg.setAttribute("height", height);
+
+  // IMPORTANTE: viewBox define o sistema de coordenadas
+  svg.setAttribute("viewBox", `0 0 ${SVG_WIDTH} ${height}`);
+  svg.setAttribute("width", "100%");
+  svg.setAttribute("height", "auto");
+  svg.setAttribute("preserveAspectRatio", "xMinYMin meet");
+
   svg.classList.add("grafico-taf");
 
+  // fundo
   const bg = document.createElementNS(svg.namespaceURI, "rect");
   bg.setAttribute("x", 0);
   bg.setAttribute("y", 0);
@@ -395,7 +396,7 @@ gerarGrafico(tafs) {
   }
 
   // --------------------------------
-  // 4) linhas por ICAO (botões)
+  // 4) linhas por ICAO + períodos
   // --------------------------------
   tafs.forEach((taf, index) => {
     const y =
@@ -403,15 +404,14 @@ gerarGrafico(tafs) {
       X_AXIS_HEIGHT +
       index * ROW_HEIGHT;
 
+    // botão ICAO
     const link = document.createElementNS(svg.namespaceURI, "a");
     link.setAttributeNS(
       "http://www.w3.org/1999/xlink",
       "xlink:href",
       `#${taf.icao}`
     );
-    link.setAttribute("cursor", "pointer");
 
-    // fundo do "botão"
     const rectIcao = document.createElementNS(svg.namespaceURI, "rect");
     rectIcao.setAttribute("x", 10);
     rectIcao.setAttribute("y", y);
@@ -421,18 +421,17 @@ gerarGrafico(tafs) {
     rectIcao.setAttribute("ry", 4);
     rectIcao.setAttribute("fill", "#1f2933");
 
-    // texto ICAO
-    const text = document.createElementNS(svg.namespaceURI, "text");
-    text.setAttribute("x", 10 + ICAO_BOX_WIDTH / 2);
-    text.setAttribute("y", y + ICAO_BOX_HEIGHT / 2 + 4);
-    text.setAttribute("text-anchor", "middle");
-    text.setAttribute("font-size", "12");
-    text.setAttribute("font-family", "sans-serif");
-    text.setAttribute("fill", "#ffffff");
-    text.textContent = taf.icao;
+    const textIcao = document.createElementNS(svg.namespaceURI, "text");
+    textIcao.setAttribute("x", 10 + ICAO_BOX_WIDTH / 2);
+    textIcao.setAttribute("y", y + ICAO_BOX_HEIGHT / 2 + 4);
+    textIcao.setAttribute("text-anchor", "middle");
+    textIcao.setAttribute("font-size", "12");
+    textIcao.setAttribute("font-family", "sans-serif");
+    textIcao.setAttribute("fill", "#fff");
+    textIcao.textContent = taf.icao;
 
     link.appendChild(rectIcao);
-    link.appendChild(text);
+    link.appendChild(textIcao);
     svg.appendChild(link);
 
     // períodos
@@ -454,16 +453,20 @@ gerarGrafico(tafs) {
       rect.setAttribute("width", Math.max(largura, 1));
       rect.setAttribute("height", ROW_HEIGHT - 4);
       rect.classList.add(periodo.condicao);
-
-      const title = document.createElementNS(svg.namespaceURI, "title");
-      title.textContent =
-        `${taf.icao}\n` +
-        `${this.formatarDataUTC(periodo.data_hora_inicio)} → ` +
-        `${this.formatarDataUTC(periodo.data_hora_fim)}\n` +
-        `Condição: ${periodo.condicao}`;
-      rect.appendChild(title);
-
+      rect.setAttribute("stroke", "#000");
+      rect.setAttribute("stroke-width", "0.5");
       svg.appendChild(rect);
+
+      if (periodo.tempo_presente?.length) {
+        const text = document.createElementNS(svg.namespaceURI, "text");
+        text.setAttribute("x", xInicio + largura / 2);
+        text.setAttribute("y", y + (ROW_HEIGHT - 4) / 2 + 4);
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("font-size", "11");
+        text.setAttribute("font-family", "sans-serif");
+        text.textContent = periodo.tempo_presente.join(" ");
+        svg.appendChild(text);
+      }
     });
   });
 
@@ -476,5 +479,7 @@ gerarGrafico(tafs) {
 
   return container;
 }
+
+
 
 }

@@ -33,6 +33,7 @@ body{
 
 #wrapper{
     max-width: 1600px;
+  width: 90%;
 }
 
 h1{
@@ -191,7 +192,14 @@ Links
 
 .grafico-container {
   margin-bottom: 30px;
+  width: 100%;
   overflow-x: auto;
+}
+
+.grafico-taf {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 svg .VMC {
