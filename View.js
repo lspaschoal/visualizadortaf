@@ -314,7 +314,6 @@ class View {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("viewBox", `0 0 ${SVG_WIDTH} ${height}`);
     svg.setAttribute("width", "100%");
-    svg.setAttribute("height", "auto");
     svg.setAttribute("preserveAspectRatio", "xMinYMin meet");
     svg.classList.add("grafico-taf");
 
@@ -363,6 +362,7 @@ class View {
         labelData.setAttribute("text-anchor", "middle");
         labelData.setAttribute("font-size", "12");
         labelData.setAttribute("font-family", "sans-serif");
+        labelData.setAttribute("font-weight", "1000");
         labelData.textContent = dataStr;
         svg.appendChild(labelData);
         ultimaData = dataStr;
@@ -375,6 +375,10 @@ class View {
       labelHora.setAttribute("text-anchor", "middle");
       labelHora.setAttribute("font-size", "11");
       labelHora.setAttribute("font-family", "sans-serif");
+      if ([0, 6, 12, 18].includes(horaAtual.getHours())){
+        labelHora.setAttribute("font-size", "14");
+        labelHora.setAttribute("font-weight", "1000");
+      }  
       labelHora.textContent = `${hora}Z`;
       svg.appendChild(labelHora);
 
@@ -422,7 +426,7 @@ class View {
         const xInicio =
           LEFT_MARGIN +
           ((periodo.data_hora_inicio - inicioGlobal) / duracaoTotal) *
-            larguraUtil;
+          larguraUtil;
 
         const largura =
           ((periodo.data_hora_fim - periodo.data_hora_inicio) / duracaoTotal) *
@@ -446,11 +450,10 @@ class View {
           )} → ${this.formatarDataUTC(periodo.data_hora_fim)}\n` +
           `Visibilidade: ${periodo.visibilidade ?? "—"} m\n` +
           `Teto: ${periodo.teto ?? "UNL"} ft\n` +
-          `Tempo presente: ${
-            Array.isArray(periodo.tempo_presente) &&
+          `Tempo presente: ${Array.isArray(periodo.tempo_presente) &&
             periodo.tempo_presente.length
-              ? periodo.tempo_presente.join(" | ")
-              : "—"
+            ? periodo.tempo_presente.join(" | ")
+            : "—"
           }`;
 
         grupo.appendChild(title);
