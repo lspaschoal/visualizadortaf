@@ -100,7 +100,7 @@ class View {
 
   gerarTabelaPeriodos(taf) {
     //tabela
-    let div_tabela = document.createElement('div');
+    let div_tabela = document.createElement("div");
     div_tabela.id = `${taf.icao}`;
 
     let tabela = document.createElement("table");
@@ -167,8 +167,6 @@ class View {
 
     //body
     let tbody = document.createElement("tbody");
-
-
 
     taf.periodos.forEach((periodo, index) => {
       let tr = document.createElement("tr");
@@ -243,267 +241,257 @@ class View {
   }
 
   criarSelectCondicao(condicao) {
-    const select = document.createElement('select');
+    const select = document.createElement("select");
 
-    const opt_vmc = document.createElement('option');
+    const opt_vmc = document.createElement("option");
     opt_vmc.textContent = "VMC";
-    if (condicao === 'VMC') opt_vmc.selected = true;
+    if (condicao === "VMC") opt_vmc.selected = true;
     select.appendChild(opt_vmc);
 
-    const opt_imc = document.createElement('option');
+    const opt_imc = document.createElement("option");
     opt_imc.textContent = "IMC";
-    if (condicao === 'IMC') opt_imc.selected = true;
+    if (condicao === "IMC") opt_imc.selected = true;
     select.appendChild(opt_imc);
 
-    const opt_degradado = document.createElement('option');
+    const opt_degradado = document.createElement("option");
     opt_degradado.textContent = "DEGRADADO";
-    if (condicao === 'DEGRADADO') opt_degradado.selected = true;
+    if (condicao === "DEGRADADO") opt_degradado.selected = true;
     select.appendChild(opt_degradado);
 
-    const opt_qgo = document.createElement('option');
+    const opt_qgo = document.createElement("option");
     opt_qgo.textContent = "QGO";
-    if (condicao === 'QGO') opt_qgo.selected = true;
+    if (condicao === "QGO") opt_qgo.selected = true;
     select.appendChild(opt_qgo);
 
     return select;
   }
 
   gerarBotaoLink(icao) {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
+    const li = document.createElement("li");
+    const a = document.createElement("a");
     a.textContent = icao;
-    a.setAttribute('href', `#${icao}`);
+    a.setAttribute("href", `#${icao}`);
     li.appendChild(a);
-    document.getElementById('links').firstElementChild.appendChild(li);
+    document.getElementById("links").firstElementChild.appendChild(li);
   }
 
-gerarGrafico(tafs) {
-  const SVG_WIDTH = 1600;
-  const LEFT_MARGIN = 120;
-  const RIGHT_MARGIN = 20;
-  const TOP_MARGIN = 50;
-  const ROW_HEIGHT = 28;
-  const X_AXIS_HEIGHT = 40;
+  gerarGrafico(tafs) {
+    const SVG_WIDTH = 1600;
+    const LEFT_MARGIN = 120;
+    const RIGHT_MARGIN = 20;
+    const TOP_MARGIN = 50;
+    const ROW_HEIGHT = 28;
+    const X_AXIS_HEIGHT = 40;
 
-  const ICAO_BOX_WIDTH = 90;
-  const ICAO_BOX_HEIGHT = ROW_HEIGHT - 4;
+    const ICAO_BOX_WIDTH = 90;
+    const ICAO_BOX_HEIGHT = ROW_HEIGHT - 4;
 
-  // --------------------------------------------------
-  // 1) intervalo global de tempo
-  // --------------------------------------------------
-  let inicioGlobal = null;
-  let fimGlobal = null;
+    // --------------------------------------------------
+    // 1) intervalo global de tempo
+    // --------------------------------------------------
+    let inicioGlobal = null;
+    let fimGlobal = null;
 
-  tafs.forEach(taf => {
-    taf.periodos.forEach(p => {
-      if (!inicioGlobal || p.data_hora_inicio < inicioGlobal) {
-        inicioGlobal = p.data_hora_inicio;
-      }
-      if (!fimGlobal || p.data_hora_fim > fimGlobal) {
-        fimGlobal = p.data_hora_fim;
-      }
+    tafs.forEach((taf) => {
+      taf.periodos.forEach((p) => {
+        if (!inicioGlobal || p.data_hora_inicio < inicioGlobal) {
+          inicioGlobal = p.data_hora_inicio;
+        }
+        if (!fimGlobal || p.data_hora_fim > fimGlobal) {
+          fimGlobal = p.data_hora_fim;
+        }
+      });
     });
-  });
 
-  const duracaoTotal = fimGlobal - inicioGlobal;
-  const larguraUtil = SVG_WIDTH - LEFT_MARGIN - RIGHT_MARGIN;
+    const duracaoTotal = fimGlobal - inicioGlobal;
+    const larguraUtil = SVG_WIDTH - LEFT_MARGIN - RIGHT_MARGIN;
 
-  // --------------------------------------------------
-  // 2) SVG base (responsivo)
-  // --------------------------------------------------
-  const height =
-    TOP_MARGIN +
-    X_AXIS_HEIGHT +
-    tafs.length * ROW_HEIGHT +
-    20;
+    // --------------------------------------------------
+    // 2) SVG base (responsivo)
+    // --------------------------------------------------
+    const height = TOP_MARGIN + X_AXIS_HEIGHT + tafs.length * ROW_HEIGHT + 20;
 
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("viewBox", `0 0 ${SVG_WIDTH} ${height}`);
-  svg.setAttribute("width", "100%");
-  svg.setAttribute("height", "auto");
-  svg.setAttribute("preserveAspectRatio", "xMinYMin meet");
-  svg.classList.add("grafico-taf");
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", `0 0 ${SVG_WIDTH} ${height}`);
+    svg.setAttribute("width", "100%");
+    svg.setAttribute("height", "auto");
+    svg.setAttribute("preserveAspectRatio", "xMinYMin meet");
+    svg.classList.add("grafico-taf");
 
-  const bg = document.createElementNS(svg.namespaceURI, "rect");
-  bg.setAttribute("x", 0);
-  bg.setAttribute("y", 0);
-  bg.setAttribute("width", SVG_WIDTH);
-  bg.setAttribute("height", height);
-  bg.setAttribute("fill", "#fff");
-  svg.appendChild(bg);
+    const bg = document.createElementNS(svg.namespaceURI, "rect");
+    bg.setAttribute("x", 0);
+    bg.setAttribute("y", 0);
+    bg.setAttribute("width", SVG_WIDTH);
+    bg.setAttribute("height", height);
+    bg.setAttribute("fill", "#fff");
+    svg.appendChild(bg);
 
-  // --------------------------------------------------
-  // 3) eixo X – data em cima / hora embaixo
-  // --------------------------------------------------
-  let horaAtual = new Date(inicioGlobal);
-  horaAtual.setUTCMinutes(0, 0, 0);
-  let ultimaData = "";
+    // --------------------------------------------------
+    // 3) eixo X – data em cima / hora embaixo
+    // --------------------------------------------------
+    let horaAtual = new Date(inicioGlobal);
+    horaAtual.setUTCMinutes(0, 0, 0);
+    let ultimaData = "";
 
-  while (horaAtual < fimGlobal) {
-    const proximaHora = new Date(horaAtual);
-    proximaHora.setUTCHours(proximaHora.getUTCHours() + 1);
+    while (horaAtual < fimGlobal) {
+      const proximaHora = new Date(horaAtual);
+      proximaHora.setUTCHours(proximaHora.getUTCHours() + 1);
 
-    const xInicio =
-      LEFT_MARGIN +
-      ((horaAtual - inicioGlobal) / duracaoTotal) * larguraUtil;
+      const xInicio =
+        LEFT_MARGIN + ((horaAtual - inicioGlobal) / duracaoTotal) * larguraUtil;
 
-    const xFim =
-      LEFT_MARGIN +
-      ((proximaHora - inicioGlobal) / duracaoTotal) * larguraUtil;
+      const xFim =
+        LEFT_MARGIN +
+        ((proximaHora - inicioGlobal) / duracaoTotal) * larguraUtil;
 
-    const xCentro = (xInicio + xFim) / 2;
+      const xCentro = (xInicio + xFim) / 2;
 
-    const linha = document.createElementNS(svg.namespaceURI, "line");
-    linha.setAttribute("x1", xInicio);
-    linha.setAttribute("x2", xInicio);
-    linha.setAttribute("y1", TOP_MARGIN);
-    linha.setAttribute("y2", height - 10);
-    linha.setAttribute("stroke", "#ddd");
-    linha.setAttribute("stroke-width", "1");
-    svg.appendChild(linha);
+      const linha = document.createElementNS(svg.namespaceURI, "line");
+      linha.setAttribute("x1", xInicio);
+      linha.setAttribute("x2", xInicio);
+      linha.setAttribute("y1", TOP_MARGIN);
+      linha.setAttribute("y2", height - 10);
+      linha.setAttribute("stroke", "#ddd");
+      linha.setAttribute("stroke-width", "1");
+      svg.appendChild(linha);
 
-    const dataStr = this.formatarDataUTC(horaAtual).split(" ")[0];
-    if (dataStr !== ultimaData) {
-      const labelData = document.createElementNS(svg.namespaceURI, "text");
-      labelData.setAttribute("x", xCentro);
-      labelData.setAttribute("y", TOP_MARGIN - 28);
-      labelData.setAttribute("text-anchor", "middle");
-      labelData.setAttribute("font-size", "12");
-      labelData.setAttribute("font-family", "sans-serif");
-      labelData.textContent = dataStr;
-      svg.appendChild(labelData);
-      ultimaData = dataStr;
+      const dataStr = this.formatarDataUTC(horaAtual).split(" ")[0];
+      if (dataStr !== ultimaData) {
+        const labelData = document.createElementNS(svg.namespaceURI, "text");
+        labelData.setAttribute("x", xCentro);
+        labelData.setAttribute("y", TOP_MARGIN - 28);
+        labelData.setAttribute("text-anchor", "middle");
+        labelData.setAttribute("font-size", "12");
+        labelData.setAttribute("font-family", "sans-serif");
+        labelData.textContent = dataStr;
+        svg.appendChild(labelData);
+        ultimaData = dataStr;
+      }
+
+      const hora = String(horaAtual.getUTCHours()).padStart(2, "0");
+      const labelHora = document.createElementNS(svg.namespaceURI, "text");
+      labelHora.setAttribute("x", xCentro);
+      labelHora.setAttribute("y", TOP_MARGIN - 10);
+      labelHora.setAttribute("text-anchor", "middle");
+      labelHora.setAttribute("font-size", "11");
+      labelHora.setAttribute("font-family", "sans-serif");
+      labelHora.textContent = `${hora}Z`;
+      svg.appendChild(labelHora);
+
+      horaAtual = proximaHora;
     }
 
-    const hora = String(horaAtual.getUTCHours()).padStart(2, "0");
-    const labelHora = document.createElementNS(svg.namespaceURI, "text");
-    labelHora.setAttribute("x", xCentro);
-    labelHora.setAttribute("y", TOP_MARGIN - 10);
-    labelHora.setAttribute("text-anchor", "middle");
-    labelHora.setAttribute("font-size", "11");
-    labelHora.setAttribute("font-family", "sans-serif");
-    labelHora.textContent = `${hora}Z`;
-    svg.appendChild(labelHora);
+    // --------------------------------------------------
+    // 4) linhas por ICAO + períodos
+    // --------------------------------------------------
+    tafs.forEach((taf, index) => {
+      const y = TOP_MARGIN + X_AXIS_HEIGHT + index * ROW_HEIGHT;
 
-    horaAtual = proximaHora;
-  }
-
-  // --------------------------------------------------
-  // 4) linhas por ICAO + períodos
-  // --------------------------------------------------
-  tafs.forEach((taf, index) => {
-    const y =
-      TOP_MARGIN +
-      X_AXIS_HEIGHT +
-      index * ROW_HEIGHT;
-
-    // botão ICAO (eixo Y)
-    const linkIcao = document.createElementNS(svg.namespaceURI, "a");
-    linkIcao.setAttributeNS(
-      "http://www.w3.org/1999/xlink",
-      "xlink:href",
-      `#${taf.icao}`
-    );
-
-    const rectIcao = document.createElementNS(svg.namespaceURI, "rect");
-    rectIcao.setAttribute("x", 10);
-    rectIcao.setAttribute("y", y);
-    rectIcao.setAttribute("width", ICAO_BOX_WIDTH);
-    rectIcao.setAttribute("height", ICAO_BOX_HEIGHT);
-    rectIcao.setAttribute("rx", 4);
-    rectIcao.setAttribute("ry", 4);
-    rectIcao.setAttribute("fill", "#1f2933");
-
-    const textIcao = document.createElementNS(svg.namespaceURI, "text");
-    textIcao.setAttribute("x", 10 + ICAO_BOX_WIDTH / 2);
-    textIcao.setAttribute("y", y + ICAO_BOX_HEIGHT / 2 + 4);
-    textIcao.setAttribute("text-anchor", "middle");
-    textIcao.setAttribute("font-size", "12");
-    textIcao.setAttribute("font-family", "sans-serif");
-    textIcao.setAttribute("fill", "#fff");
-    textIcao.textContent = taf.icao;
-
-    linkIcao.appendChild(rectIcao);
-    linkIcao.appendChild(textIcao);
-    svg.appendChild(linkIcao);
-
-    // períodos
-    taf.periodos.forEach(periodo => {
-      const xInicio =
-        LEFT_MARGIN +
-        ((periodo.data_hora_inicio - inicioGlobal) /
-          duracaoTotal) *
-          larguraUtil;
-
-      const largura =
-        ((periodo.data_hora_fim - periodo.data_hora_inicio) /
-          duracaoTotal) *
-        larguraUtil;
-
-      // link do período (vale para tudo)
-      const linkPeriodo = document.createElementNS(svg.namespaceURI, "a");
-      linkPeriodo.setAttributeNS(
+      // botão ICAO (eixo Y)
+      const linkIcao = document.createElementNS(svg.namespaceURI, "a");
+      linkIcao.setAttributeNS(
         "http://www.w3.org/1999/xlink",
         "xlink:href",
         `#${taf.icao}`
       );
 
-      const grupo = document.createElementNS(svg.namespaceURI, "g");
+      const rectIcao = document.createElementNS(svg.namespaceURI, "rect");
+      rectIcao.setAttribute("x", 10);
+      rectIcao.setAttribute("y", y);
+      rectIcao.setAttribute("width", ICAO_BOX_WIDTH);
+      rectIcao.setAttribute("height", ICAO_BOX_HEIGHT);
+      rectIcao.setAttribute("rx", 4);
+      rectIcao.setAttribute("ry", 4);
+      rectIcao.setAttribute("fill", "#1f2933");
 
-      const title = document.createElementNS(svg.namespaceURI, "title");
-      title.textContent =
-        `${taf.icao}\n` +
-        `${this.formatarDataUTC(periodo.data_hora_inicio)} → ${this.formatarDataUTC(periodo.data_hora_fim)}\n` +
-        `Visibilidade: ${periodo.visibilidade ?? "—"} m\n` +
-        `Teto: ${periodo.teto ?? "UNL"} ft\n` +
-        `Tempo presente: ${
-          Array.isArray(periodo.tempo_presente) && periodo.tempo_presente.length
-            ? periodo.tempo_presente.join(" | ")
-            : "—"
-        }`;
+      const textIcao = document.createElementNS(svg.namespaceURI, "text");
+      textIcao.setAttribute("x", 10 + ICAO_BOX_WIDTH / 2);
+      textIcao.setAttribute("y", y + ICAO_BOX_HEIGHT / 2 + 4);
+      textIcao.setAttribute("text-anchor", "middle");
+      textIcao.setAttribute("font-size", "12");
+      textIcao.setAttribute("font-family", "sans-serif");
+      textIcao.setAttribute("fill", "#fff");
+      textIcao.textContent = taf.icao;
 
-      grupo.appendChild(title);
+      linkIcao.appendChild(rectIcao);
+      linkIcao.appendChild(textIcao);
+      svg.appendChild(linkIcao);
 
-      const rect = document.createElementNS(svg.namespaceURI, "rect");
-      rect.setAttribute("x", xInicio);
-      rect.setAttribute("y", y);
-      rect.setAttribute("width", Math.max(largura, 1));
-      rect.setAttribute("height", ROW_HEIGHT - 4);
-      rect.classList.add(periodo.condicao);
-      rect.setAttribute("stroke", "#000");
-      rect.setAttribute("stroke-width", "0.5");
+      // períodos
+      taf.periodos.forEach((periodo) => {
+        const xInicio =
+          LEFT_MARGIN +
+          ((periodo.data_hora_inicio - inicioGlobal) / duracaoTotal) *
+            larguraUtil;
 
-      grupo.appendChild(rect);
+        const largura =
+          ((periodo.data_hora_fim - periodo.data_hora_inicio) / duracaoTotal) *
+          larguraUtil;
 
-      if (Array.isArray(periodo.tempo_presente) && periodo.tempo_presente.length) {
-        const text = document.createElementNS(svg.namespaceURI, "text");
-        text.setAttribute("x", xInicio + largura / 2);
-        text.setAttribute("y", y + (ROW_HEIGHT - 4) / 2 + 4);
-        text.setAttribute("text-anchor", "middle");
-        text.setAttribute("font-size", "11");
-        text.setAttribute("font-family", "sans-serif");
-        text.textContent = periodo.tempo_presente.join(" | ");
-        grupo.appendChild(text);
-      }
+        // link do período (vale para tudo)
+        const linkPeriodo = document.createElementNS(svg.namespaceURI, "a");
+        linkPeriodo.setAttributeNS(
+          "http://www.w3.org/1999/xlink",
+          "xlink:href",
+          `#${taf.icao}`
+        );
 
-      linkPeriodo.appendChild(grupo);
-      svg.appendChild(linkPeriodo);
+        const grupo = document.createElementNS(svg.namespaceURI, "g");
+
+        const title = document.createElementNS(svg.namespaceURI, "title");
+        title.textContent =
+          `${taf.icao}\n` +
+          `${this.formatarDataUTC(
+            periodo.data_hora_inicio
+          )} → ${this.formatarDataUTC(periodo.data_hora_fim)}\n` +
+          `Visibilidade: ${periodo.visibilidade ?? "—"} m\n` +
+          `Teto: ${periodo.teto ?? "UNL"} ft\n` +
+          `Tempo presente: ${
+            Array.isArray(periodo.tempo_presente) &&
+            periodo.tempo_presente.length
+              ? periodo.tempo_presente.join(" | ")
+              : "—"
+          }`;
+
+        grupo.appendChild(title);
+
+        const rect = document.createElementNS(svg.namespaceURI, "rect");
+        rect.setAttribute("x", xInicio);
+        rect.setAttribute("y", y);
+        rect.setAttribute("width", Math.max(largura, 1));
+        rect.setAttribute("height", ROW_HEIGHT - 4);
+        rect.classList.add(periodo.condicao);
+        rect.setAttribute("stroke", "#000");
+        rect.setAttribute("stroke-width", "0.5");
+
+        grupo.appendChild(rect);
+
+        if (
+          Array.isArray(periodo.tempo_presente) &&
+          periodo.tempo_presente.length
+        ) {
+          const text = document.createElementNS(svg.namespaceURI, "text");
+          text.setAttribute("x", xInicio + largura / 2);
+          text.setAttribute("y", y + (ROW_HEIGHT - 4) / 2 + 4);
+          text.setAttribute("text-anchor", "middle");
+          text.setAttribute("font-size", "11");
+          text.setAttribute("font-family", "sans-serif");
+          text.textContent = periodo.tempo_presente.join(" | ");
+          grupo.appendChild(text);
+        }
+
+        linkPeriodo.appendChild(grupo);
+        svg.appendChild(linkPeriodo);
+      });
     });
-  });
 
-  // --------------------------------------------------
-  // 5) wrapper
-  // --------------------------------------------------
-  const container = document.createElement("div");
-  container.classList.add("grafico-container");
-  container.appendChild(svg);
+    // --------------------------------------------------
+    // 5) wrapper
+    // --------------------------------------------------
+    const container = document.createElement("div");
+    container.classList.add("grafico-container");
+    container.appendChild(svg);
 
-  return container;
-}
-
-
-
-
-
-
+    return container;
+  }
 }
