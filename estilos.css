@@ -6,39 +6,39 @@
   --cinza-indisponivel: #bfbfbf;
 }
 
-.VMC{
-    background-color: var(--verde-vmc);
+.VMC {
+  background-color: var(--verde-vmc);
 }
 
-.IMC{
-    background-color: var(--amarelo-imc);
+.IMC {
+  background-color: var(--amarelo-imc);
 }
 
-.DEGRADADO{
-    background-color: var(--laranja-degradado);
+.DEGRADADO {
+  background-color: var(--laranja-degradado);
 }
 
-.QGO{
-    background-color: var(--vermelho-qgo);
+.QGO {
+  background-color: var(--vermelho-qgo);
 }
 
-body{
-    background-color: #D4DDEE;
-    /* background-color: #f5f5f5; */
-    /* background-color: #eef3f8; */
-    /* background-color: #0f172a; */
-    display: flex;
-    justify-content: center;
+body {
+  background-color: #d4ddee;
+  /* background-color: #f5f5f5; */
+  /* background-color: #eef3f8; */
+  /* background-color: #0f172a; */
+  display: flex;
+  justify-content: center;
 }
 
-#wrapper{
-    max-width: 1600px;
+#wrapper {
+  max-width: 1600px;
   width: 90%;
 }
 
-h1{
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
+h1 {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
 }
 
 /*
@@ -46,146 +46,146 @@ Links
 */
 
 #links {
-    padding: 16px;
-    background-color: transparent;
+  padding: 16px;
+  background-color: transparent;
 }
 
 #links ul {
-    display: flex;           /* container flex */
-    flex-wrap: wrap;
-    justify-content: center; /* centraliza a última linha */
-    gap: 16px;               /* ESPAÇO ENTRE OS BOTÕES */
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  display: flex; /* container flex */
+  flex-wrap: wrap;
+  justify-content: center; /* centraliza a última linha */
+  gap: 16px; /* ESPAÇO ENTRE OS BOTÕES */
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 #links li {
-    width: 58px;
-    margin: 0 10px;
+  width: 58px;
+  margin: 0 10px;
 }
 
 #links a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 12px 16px;
-    text-decoration: none;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    color: #ffffff;
-    background-color: #1f2933;
-    border-radius: 6px;
-    text-align: center;
-    transition: background-color 0.2s ease, transform 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px 16px;
+  text-decoration: none;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #1f2933;
+  border-radius: 6px;
+  text-align: center;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 #links a:hover {
-    background-color: #374151;
-    transform: translateY(-1px);
+  background-color: #374151;
+  transform: translateY(-1px);
 }
 
 #links a:active {
-    transform: translateY(0);
+  transform: translateY(0);
 }
-
 
 /* fim links*/
 
 .tabela-periodos {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    font-size: 14px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    margin-bottom: 32px;
+  width: 100%;
+  border-collapse: collapse;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 14px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  margin-bottom: 32px;
 }
 
-.tabela-periodos th, .tabela-periodos td{
-    text-align: center;
-    vertical-align: middle;
+.tabela-periodos th,
+.tabela-periodos td {
+  text-align: center;
+  vertical-align: middle;
 }
 
 /* ===== CABEÇALHO ===== */
 .tabela-periodos thead th {
-    text-align: center;
+  text-align: center;
 }
 
 .tabela-periodos thead tr:first-child th {
-    background: linear-gradient(135deg, #1f2933, #111827);
-    color: #ffffff;
-    font-size: 18px;
-    font-weight: 600;
-    padding: 14px 16px;
+  background: linear-gradient(135deg, #1f2933, #111827);
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 14px 16px;
 }
 
 .tabela-periodos thead tr:nth-child(2) th {
-    background-color: #f3f4f6;
-    color: #374151;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 10px 16px;
+  background-color: #f3f4f6;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 16px;
 }
 
 .tabela-periodos thead tr:last-child th {
-    background-color: #111827;
-    color: #e5e7eb;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 12px 16px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    border-bottom: 1px solid #374151;
+  background-color: #111827;
+  color: #e5e7eb;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid #374151;
 }
 
 /* ===== CORPO ===== */
 .tabela-periodos tbody tr {
-    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .tabela-periodos tbody td {
-    padding: 12px 16px;
-    color: #1f2933;
-    vertical-align: middle;
-    border-bottom: 1px solid #e5e7eb;
-    white-space: nowrap;
-    text-align: center;
+  padding: 12px 16px;
+  color: #1f2933;
+  vertical-align: middle;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+  text-align: center;
 }
 
 /* ===== DESTAQUES ===== */
 .tabela-periodos tbody td:first-child,
 .tabela-periodos tbody td:nth-child(2) {
-    font-weight: 600;
-    color: #111827;
+  font-weight: 600;
+  color: #111827;
 }
 
 .tabela-periodos tbody td:nth-child(3) {
-    font-family: monospace;
-    font-weight: 600;
+  font-family: monospace;
+  font-weight: 600;
 }
 
 /* ===== ÚLTIMA LINHA ===== */
 .tabela-periodos tbody tr:last-child td {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 900px) {
-    .tabela-periodos {
-        display: block;
-        overflow-x: auto;
-    }
+  .tabela-periodos {
+    display: block;
+    overflow-x: auto;
+  }
 
-    .tabela-periodos thead,
-    .tabela-periodos tbody,
-    .tabela-periodos tr {
-        white-space: nowrap;
-    }
+  .tabela-periodos thead,
+  .tabela-periodos tbody,
+  .tabela-periodos tr {
+    white-space: nowrap;
+  }
 }
 
 /* Gráfico */
@@ -217,7 +217,6 @@ svg .DEGRADADO {
 svg .QGO {
   fill: var(--vermelho-qgo);
 }
-
 
 #btn-topo {
   position: fixed;
