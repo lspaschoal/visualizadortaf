@@ -322,15 +322,12 @@ gerarGrafico(tafs) {
     "svg"
   );
 
-  // IMPORTANTE: viewBox define o sistema de coordenadas
   svg.setAttribute("viewBox", `0 0 ${SVG_WIDTH} ${height}`);
   svg.setAttribute("width", "100%");
   svg.setAttribute("height", "auto");
   svg.setAttribute("preserveAspectRatio", "xMinYMin meet");
-
   svg.classList.add("grafico-taf");
 
-  // fundo
   const bg = document.createElementNS(svg.namespaceURI, "rect");
   bg.setAttribute("x", 0);
   bg.setAttribute("y", 0);
@@ -457,14 +454,15 @@ gerarGrafico(tafs) {
       rect.setAttribute("stroke-width", "0.5");
       svg.appendChild(rect);
 
-      if (periodo.tempo_presente?.length) {
+      // texto de tempo presente (array → string)
+      if (Array.isArray(periodo.tempo_presente) && periodo.tempo_presente.length) {
         const text = document.createElementNS(svg.namespaceURI, "text");
         text.setAttribute("x", xInicio + largura / 2);
         text.setAttribute("y", y + (ROW_HEIGHT - 4) / 2 + 4);
         text.setAttribute("text-anchor", "middle");
         text.setAttribute("font-size", "11");
         text.setAttribute("font-family", "sans-serif");
-        text.textContent = periodo.tempo_presente.join(" ");
+        text.textContent = periodo.tempo_presente.join(" | ");
         svg.appendChild(text);
       }
     });
@@ -479,6 +477,7 @@ gerarGrafico(tafs) {
 
   return container;
 }
+
 
 
 

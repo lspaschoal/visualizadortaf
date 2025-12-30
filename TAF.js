@@ -124,25 +124,6 @@ class TAF {
         });
     }
 
-    // tabulaTAF_old(mensagem) {
-    //     // Regex que captura os grupos de PROB30, PROB40, BECMG, TEMPO, FM
-    //     const regex = /(PROB30|PROB40)?\s?(BECMG|TEMPO|FM\d{6})?\s?\d{4}\/\d{4}.*?(?=(PROB30|PROB40|BECMG|TEMPO|FM\d{6}|$))/g;
-
-    //     let horarios = [];
-    //     let match;
-
-    //     // Executa a correspondência da regex para encontrar os grupos
-    //     while ((match = regex.exec(mensagem)) !== null) {
-    //         // Limpa o que foi capturado para retornar apenas o texto relevante
-    //         let horario = match[0].trim();
-    //         if (horario) {
-    //             horarios.push(horario);
-    //         }
-    //     }
-
-    //     return horarios;
-    // }
-
     tabulaTAF(taf) {
         // Regex que identifica o início de um novo grupo
         const groupRegex = /\b(PROB30|PROB40)?\s*(BECMG|TEMPO|FM\d{6})\b|\b(PROB30|PROB40)\b/g;
