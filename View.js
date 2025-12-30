@@ -288,9 +288,9 @@ gerarGrafico(tafs) {
   const ICAO_BOX_WIDTH = 90;
   const ICAO_BOX_HEIGHT = ROW_HEIGHT - 4;
 
-  // --------------------------------
+  // --------------------------------------------------
   // 1) intervalo global de tempo
-  // --------------------------------
+  // --------------------------------------------------
   let inicioGlobal = null;
   let fimGlobal = null;
 
@@ -308,20 +308,16 @@ gerarGrafico(tafs) {
   const duracaoTotal = fimGlobal - inicioGlobal;
   const larguraUtil = SVG_WIDTH - LEFT_MARGIN - RIGHT_MARGIN;
 
-  // --------------------------------
+  // --------------------------------------------------
   // 2) SVG base (responsivo)
-  // --------------------------------
+  // --------------------------------------------------
   const height =
     TOP_MARGIN +
     X_AXIS_HEIGHT +
     tafs.length * ROW_HEIGHT +
     20;
 
-  const svg = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "svg"
-  );
-
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", `0 0 ${SVG_WIDTH} ${height}`);
   svg.setAttribute("width", "100%");
   svg.setAttribute("height", "auto");
@@ -336,9 +332,9 @@ gerarGrafico(tafs) {
   bg.setAttribute("fill", "#fff");
   svg.appendChild(bg);
 
-  // --------------------------------
+  // --------------------------------------------------
   // 3) eixo X – data em cima / hora embaixo
-  // --------------------------------
+  // --------------------------------------------------
   let horaAtual = new Date(inicioGlobal);
   horaAtual.setUTCMinutes(0, 0, 0);
   let ultimaData = "";
@@ -392,18 +388,18 @@ gerarGrafico(tafs) {
     horaAtual = proximaHora;
   }
 
-  // --------------------------------
+  // --------------------------------------------------
   // 4) linhas por ICAO + períodos
-  // --------------------------------
+  // --------------------------------------------------
   tafs.forEach((taf, index) => {
     const y =
       TOP_MARGIN +
       X_AXIS_HEIGHT +
       index * ROW_HEIGHT;
 
-    // botão ICAO
-    const link = document.createElementNS(svg.namespaceURI, "a");
-    link.setAttributeNS(
+    // botão ICAO (eixo Y)
+    const linkIcao = document.createElementNS(svg.namespaceURI, "a");
+    linkIcao.setAttributeNS(
       "http://www.w3.org/1999/xlink",
       "xlink:href",
       `#${taf.icao}`
@@ -427,9 +423,9 @@ gerarGrafico(tafs) {
     textIcao.setAttribute("fill", "#fff");
     textIcao.textContent = taf.icao;
 
-    link.appendChild(rectIcao);
-    link.appendChild(textIcao);
-    svg.appendChild(link);
+    linkIcao.appendChild(rectIcao);
+    linkIcao.appendChild(textIcao);
+    svg.appendChild(linkIcao);
 
     // períodos
     taf.periodos.forEach(periodo => {
@@ -444,6 +440,30 @@ gerarGrafico(tafs) {
           duracaoTotal) *
         larguraUtil;
 
+      // link do período (vale para tudo)
+      const linkPeriodo = document.createElementNS(svg.namespaceURI, "a");
+      linkPeriodo.setAttributeNS(
+        "http://www.w3.org/1999/xlink",
+        "xlink:href",
+        `#${taf.icao}`
+      );
+
+      const grupo = document.createElementNS(svg.namespaceURI, "g");
+
+      const title = document.createElementNS(svg.namespaceURI, "title");
+      title.textContent =
+        `${taf.icao}\n` +
+        `${this.formatarDataUTC(periodo.data_hora_inicio)} → ${this.formatarDataUTC(periodo.data_hora_fim)}\n` +
+        `Visibilidade: ${periodo.visibilidade ?? "—"} m\n` +
+        `Teto: ${periodo.teto ?? "UNL"} ft\n` +
+        `Tempo presente: ${
+          Array.isArray(periodo.tempo_presente) && periodo.tempo_presente.length
+            ? periodo.tempo_presente.join(" | ")
+            : "—"
+        }`;
+
+      grupo.appendChild(title);
+
       const rect = document.createElementNS(svg.namespaceURI, "rect");
       rect.setAttribute("x", xInicio);
       rect.setAttribute("y", y);
@@ -452,9 +472,9 @@ gerarGrafico(tafs) {
       rect.classList.add(periodo.condicao);
       rect.setAttribute("stroke", "#000");
       rect.setAttribute("stroke-width", "0.5");
-      svg.appendChild(rect);
 
-      // texto de tempo presente (array → string)
+      grupo.appendChild(rect);
+
       if (Array.isArray(periodo.tempo_presente) && periodo.tempo_presente.length) {
         const text = document.createElementNS(svg.namespaceURI, "text");
         text.setAttribute("x", xInicio + largura / 2);
@@ -463,20 +483,25 @@ gerarGrafico(tafs) {
         text.setAttribute("font-size", "11");
         text.setAttribute("font-family", "sans-serif");
         text.textContent = periodo.tempo_presente.join(" | ");
-        svg.appendChild(text);
+        grupo.appendChild(text);
       }
+
+      linkPeriodo.appendChild(grupo);
+      svg.appendChild(linkPeriodo);
     });
   });
 
-  // --------------------------------
+  // --------------------------------------------------
   // 5) wrapper
-  // --------------------------------
+  // --------------------------------------------------
   const container = document.createElement("div");
   container.classList.add("grafico-container");
   container.appendChild(svg);
 
   return container;
 }
+
+
 
 
 
