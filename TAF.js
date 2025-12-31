@@ -199,7 +199,8 @@ class TAF {
     if (condicao.nuvens)
       condicao.nuvens.forEach((camada) => {
         if (camada.match(/BKN|OVC/)) {
-          let teto = Number(camada.substring(3)) * 100;
+          console.log(camada.substring(3, 6));
+          let teto = Number(camada.substring(3, 6)) * 100;
           if (condicao.teto == null || condicao.teto > teto) {
             condicao.teto = teto;
           }
@@ -234,16 +235,16 @@ class TAF {
       );
       if (
         horarios[i].visibilidade !=
-          periodos[periodos.length - 1].visibilidade ||
+        periodos[periodos.length - 1].visibilidade ||
         horarios[i].teto != periodos[periodos.length - 1].teto ||
         horarios[i].vento != periodos[periodos.length - 1].vento ||
         !this.compararArrays(
           horarios[i].nuvens,
           periodos[periodos.length - 1].nuvens ||
-            !this.compararArrays(
-              horarios[i].tempo_presente,
-              periodos[periodos.length - 1].tempo_presente
-            )
+          !this.compararArrays(
+            horarios[i].tempo_presente,
+            periodos[periodos.length - 1].tempo_presente
+          )
         )
       ) {
         periodos.push({
@@ -274,7 +275,7 @@ class TAF {
     return a.every((elemento, indice) => elemento === b[indice]);
   };
 
-  getCondicao(visibilidade, teto) {
+  getCondicao(visibilidade, teto, tempo_presente) {
     // console.log(visibilidade,teto,this.icao,MINIMOS[this.icao].visibilidade,MINIMOS[this.icao].teto);
     if (
       visibilidade < MINIMOS[this.icao].visibilidade ||
@@ -283,9 +284,19 @@ class TAF {
       return "QGO";
     if (
       visibilidade <=
-        MINIMOS[this.icao].visibilidade + MARGEM_DEGRADACAO.visibilidade ||
+      MINIMOS[this.icao].visibilidade + MARGEM_DEGRADACAO.visibilidade ||
       (teto !== null &&
-        teto <= MINIMOS[this.icao].teto + MARGEM_DEGRADACAO.teto)
+        teto <= MINIMOS[this.icao].teto + MARGEM_DEGRADACAO.teto) ||
+      (
+        tempo_presente && (
+          tempo_presente.indexOf("TSRA") !== -1 ||
+          tempo_presente.indexOf("+TSRA") !== -1 ||
+          tempo_presente.indexOf("SHRA") !== -1 ||
+          tempo_presente.indexOf("+SHRA") !== -1 ||
+          tempo_presente.indexOf("+RA") !== -1 ||
+          tempo_presente.indexOf("FG") !== -1
+        )
+      )
     )
       return "DEGRADADO";
     if (
@@ -298,7 +309,7 @@ class TAF {
 
   setCondicaoHorarios() {
     this.horarios.forEach((horario) => {
-      horario.condicao = this.getCondicao(horario.visibilidade, horario.teto);
+      horario.condicao = this.getCondicao(horario.visibilidade, horario.teto, horario.tempo_presente);
     });
   }
 }
