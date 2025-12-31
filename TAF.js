@@ -199,8 +199,7 @@ class TAF {
     if (condicao.nuvens)
       condicao.nuvens.forEach((camada) => {
         if (camada.match(/BKN|OVC/)) {
-          console.log(camada.substring(3, 6));
-          let teto = Number(camada.substring(3, 6)) * 100;
+          let teto = Number(camada.substring(3,6)) * 100;
           if (condicao.teto == null || condicao.teto > teto) {
             condicao.teto = teto;
           }
