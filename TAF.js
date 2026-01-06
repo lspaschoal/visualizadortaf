@@ -84,13 +84,13 @@ class TAF {
       .match(/FM\d{6}\s/)[0]
       .trim()
       .substring(2);
-    this.horarios.forEach((periodo, indice, arr) => {
+    this.horarios.forEach((horario, indice, arr) => {
       if (horario.ddhhmm >= inicio) {
         horario.mensagem = mensagem;
         if (condicao.visibilidade !== null)
           horario.visibilidade = condicao.visibilidade;
         if (condicao.nuvens !== null) horario.nuvens = condicao.nuvens;
-        if (condicao.condicao.teto !== null) horario.teto = condicao.teto;
+        if (condicao.teto !== null) horario.teto = condicao.teto;
         if (condicao.tempo_presente !== null)
           horario.tempo_presente = condicao.tempo_presente;
         if (condicao.vento !== null) horario.vento = condicao.vento;
