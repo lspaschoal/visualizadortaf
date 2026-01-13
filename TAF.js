@@ -12,8 +12,8 @@ class TAF {
     this.setCondicaoHorarios();
     this.periodos = this.gerarPeriodos(this.horarios);
 
-    // console.log(this.icao);
-    // console.log(this.raw);
+    console.log(this.icao);
+    console.log(this.raw);
     // console.log(this.horarios);
     // console.log(this.periodos);
   }
@@ -80,6 +80,7 @@ class TAF {
 
   inserirFM(mensagem) {
     const condicao = this.lerCondicao(mensagem);
+    console.log(this.mensagem);
     let inicio = mensagem
       .match(/FM\d{6}\s/)[0]
       .trim()
@@ -130,23 +131,29 @@ class TAF {
     taf.forEach((grupo) => {
       if (grupo.match(/TEMPO/)) {
         this.inserirTEMPO(grupo);
+        return;
       }
       if (grupo.match(/PROB/)) {
         this.inserirTEMPO(grupo);
+        return;
       }
       if (grupo.match(/BECMG/)) {
         this.inserirBECMG(grupo);
+        return;
       }
       if (grupo.match(/FM/)) {
         this.inserirFM(grupo);
+        return;
       }
     });
   }
 
   tabulaTAF(taf) {
     // Regex que identifica o início de um novo grupo
+    // const groupRegex =
+    //   /\b(PROB30|PROB40)?\s*(BECMG|TEMPO|FM\d{6})\b|\b(PROB30|PROB40)\b/g;
     const groupRegex =
-      /\b(PROB30|PROB40)?\s*(BECMG|TEMPO|FM\d{6})\b|\b(PROB30|PROB40)\b/g;
+      /\s(PROB30 TEMPO|PROB40 TEMPO|PROB30 BECMG|PROB40 BECMG|BECMG|TEMPO|FM\d{6})\s/g;
 
     const indices = [];
     let match;
@@ -205,9 +212,9 @@ class TAF {
           }
         }
       });
-    if (texto.match(/\b[+-]?(?:TSRA|RA|BR|FG|TS|VC[A-Z]{2})\b/))
+    if (texto.match(/\b[+-]?(?:TSRA|RA|BR|FG|TS|GR|VC[A-Z]{2})\b/))
       condicao.tempo_presente = [
-        ...texto.matchAll(/\b[+-]?(?:TSRA|RA|BR|FG|TS|VC[A-Z]{2})\b/g),
+        ...texto.matchAll(/\b[+-]?(?:TSRA|RA|BR|FG|TS|GR|VC[A-Z]{2})\b/g),
       ].map((m) => m[0]);
     if (texto.match(/\d{5}KT|\d{5}G\d{2}KT|VRB\d{2}KT/))
       condicao.vento = texto.match(/\d{5}KT|\d{5}G\d{2}KT|VRB\d{2}KT/)[0];
@@ -293,6 +300,8 @@ class TAF {
           tempo_presente.indexOf("SHRA") !== -1 ||
           tempo_presente.indexOf("+SHRA") !== -1 ||
           tempo_presente.indexOf("+RA") !== -1 ||
+          tempo_presente.indexOf("GR") !== -1 ||
+          tempo_presente.indexOf("+GR") !== -1 ||
           tempo_presente.indexOf("FG") !== -1
         )
       )
