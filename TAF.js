@@ -49,13 +49,30 @@ class TAF {
     this.horarios.forEach((horario) => {
       if (horario.ddhhmm >= inicio && horario.ddhhmm < fim) {
         horario.mensagem = mensagem;
-        if (condicao.visibilidade !== null)
-          horario.visibilidade = condicao.visibilidade;
-        if (condicao.teto !== null) horario.teto = condicao.teto;
-        if (condicao.nuvens !== null) horario.nuvens = condicao.nuvens;
-        if (condicao.tempo_presente !== null)
-          horario.tempo_presente = condicao.tempo_presente;
-        if (condicao.vento !== null) horario.vento = condicao.vento;
+        horario.visibilidade =
+  condicao.visibilidade !== null
+    ? condicao.visibilidade
+    : horario.visibilidade;
+
+horario.teto =
+  condicao.teto !== null
+    ? condicao.teto
+    : horario.teto;
+
+horario.nuvens =
+  condicao.nuvens !== null
+    ? condicao.nuvens
+    : horario.nuvens;
+
+horario.tempo_presente =
+  condicao.tempo_presente !== null
+    ? condicao.tempo_presente
+    : null;   // 👈 AQUI está o segredo
+
+horario.vento =
+  condicao.vento !== null
+    ? condicao.vento
+    : horario.vento;
       }
     });
   }
