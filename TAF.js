@@ -12,8 +12,8 @@ class TAF {
     this.setCondicaoHorarios();
     this.periodos = this.gerarPeriodos(this.horarios);
 
-    console.log(this.icao);
-    console.log(this.raw);
+    // console.log(this.icao);
+    // console.log(this.raw);
     // console.log(this.horarios);
     // console.log(this.periodos);
   }
@@ -49,30 +49,13 @@ class TAF {
     this.horarios.forEach((horario) => {
       if (horario.ddhhmm >= inicio && horario.ddhhmm < fim) {
         horario.mensagem = mensagem;
-        horario.visibilidade =
-  condicao.visibilidade !== null
-    ? condicao.visibilidade
-    : horario.visibilidade;
-
-horario.teto =
-  condicao.teto !== null
-    ? condicao.teto
-    : horario.teto;
-
-horario.nuvens =
-  condicao.nuvens !== null
-    ? condicao.nuvens
-    : horario.nuvens;
-
-horario.tempo_presente =
-  condicao.tempo_presente !== null
-    ? condicao.tempo_presente
-    : null;   // 👈 AQUI está o segredo
-
-horario.vento =
-  condicao.vento !== null
-    ? condicao.vento
-    : horario.vento;
+        if (condicao.visibilidade !== null)
+          horario.visibilidade = condicao.visibilidade;
+        if (condicao.teto !== null) horario.teto = condicao.teto;
+        if (condicao.nuvens !== null) horario.nuvens = condicao.nuvens;
+        if (condicao.tempo_presente !== null)
+          horario.tempo_presente = condicao.tempo_presente;
+        if (condicao.vento !== null) horario.vento = condicao.vento;
       }
     });
   }
@@ -97,7 +80,7 @@ horario.vento =
 
   inserirFM(mensagem) {
     const condicao = this.lerCondicao(mensagem);
-    console.log(this.mensagem);
+    // console.log(this.mensagem);
     let inicio = mensagem
       .match(/FM\d{6}\s/)[0]
       .trim()
@@ -133,6 +116,7 @@ horario.vento =
 
   parse(mensagem) {
     let taf = this.tabulaTAF(mensagem);
+    console.log(taf);
 
     const condicao_inicial = this.lerCondicao(taf[0]);
 
@@ -151,6 +135,7 @@ horario.vento =
         return;
       }
       if (grupo.match(/PROB/)) {
+        // console.log(grupo);
         this.inserirTEMPO(grupo);
         return;
       }
@@ -170,7 +155,7 @@ horario.vento =
     // const groupRegex =
     //   /\b(PROB30|PROB40)?\s*(BECMG|TEMPO|FM\d{6})\b|\b(PROB30|PROB40)\b/g;
     const groupRegex =
-      /\s(PROB30 TEMPO|PROB40 TEMPO|PROB30 BECMG|PROB40 BECMG|BECMG|TEMPO|FM\d{6})\s/g;
+      /\s(PROB30|PROB40|BECMG|TEMPO|FM\d{6})\s/g;
 
     const indices = [];
     let match;
@@ -338,3 +323,6 @@ horario.vento =
     });
   }
 }
+
+
+//TAF SBCT 031500Z 0318/0418 07005KT 8000 SCT015 TN14/0405Z TX26/0417Z PROB30 0322/0324 BKN004 PROB30 0406/0409 0700 FG BKN001 BECMG 0412/0414 8000 BKN020 RMK PDE=
