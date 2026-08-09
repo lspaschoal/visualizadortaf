@@ -1,14 +1,14 @@
 class TAF {
-  constructor(taf_aisweb) {
-    this.raw = taf_aisweb.mens;
-    this.icao = taf_aisweb.id_localidade;
-    this.validade_inicial = taf_aisweb.validade_inicial;
-    this.validade_final = taf_aisweb.validade_final;
+  constructor(taf_lspaschoal) {
+    this.raw = taf_lspaschoal.mensagem;
+    this.icao = taf_lspaschoal.icao;
+    this.validade_inicial = taf_lspaschoal.validade_inicial;
+    this.validade_final = taf_lspaschoal.validade_final;
     this.horarios = this.gerarHorarios(
-      taf_aisweb.validade_inicial,
-      taf_aisweb.validade_final
+      taf_lspaschoal.validade_inicial,
+      taf_lspaschoal.validade_final
     );
-    this.parse(taf_aisweb.mens);
+    this.parse(taf_lspaschoal.mensagem);
     this.setCondicaoHorarios();
     this.periodos = this.gerarPeriodos(this.horarios);
 
@@ -116,7 +116,6 @@ class TAF {
 
   parse(mensagem) {
     let taf = this.tabulaTAF(mensagem);
-    console.log(taf);
 
     const condicao_inicial = this.lerCondicao(taf[0]);
 
@@ -167,6 +166,7 @@ class TAF {
 
     // Se não encontrou grupos, retorna o TAF inteiro
     if (indices.length === 0) {
+      console.log(taf);
       return [taf.trim()];
     }
 
@@ -284,7 +284,6 @@ class TAF {
   };
 
   getCondicao(visibilidade, teto, tempo_presente) {
-    // console.log(visibilidade,teto,this.icao,MINIMOS[this.icao].visibilidade,MINIMOS[this.icao].teto);
     if (
       visibilidade < MINIMOS[this.icao].visibilidade ||
       (teto !== null && teto < MINIMOS[this.icao].teto)

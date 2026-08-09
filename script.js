@@ -1,22 +1,23 @@
 let TAFS = {};
 
-async function getTafsRedemet() {
-  const codigos_icao = Object.keys(MINIMOS).join(',');
-  const tafs_redemet = await fetch(
-    `https://api-redemet.decea.mil.br/mensagens/taf/${codigos_icao}?api_key=6vmvTQDP1t8thEEAUkCCj4z4TRjrJLcb561p1SRi`)
-    .then((res) => res.json())
-    .then((data) => data.data.data);
-    return tafs_redemet;
+async function getTafsLspaschoal() {
+  const codigos_icao = Object.keys(MINIMOS);
+  const tafs_lspaschoal = await fetch(
+    `https://api.lspaschoal.com/taf`)
+    .then((res) => res.json());
+  return Object.fromEntries(
+    Object.entries(tafs_lspaschoal).filter(([icao]) => codigos_icao.includes(icao))
+  );
 }
 
-function armazenarTafs(array_tafs){
-  array_tafs.forEach(taf => {
+function armazenarTafs(array_tafs) {
+  Object.values(array_tafs).forEach(taf => {
     taf_decodificado = new TAF(taf);
     TAFS[taf_decodificado.icao] = taf_decodificado;
   });
 }
 
-function gerarTabelas(){
+function gerarTabelas() {
   const div_tabelas = document.getElementById('tabelas');
   div_tabelas.innerHTML = '';
   const view = new View();
@@ -25,28 +26,28 @@ function gerarTabelas(){
   });
 }
 
-function atualizarTabela(icao){
+function atualizarTabela(icao) {
   const div_tabela = document.getElementById(icao);
   div_tabela.innerHTML = '';
   const view = new View();
   div_tabela.appendChild(view.gerarTabelaPeriodos(TAFS[icao]));
 }
 
-function mudarCondicao(icao,index_periodo,nova_condicao){
+function mudarCondicao(icao, index_periodo, nova_condicao) {
   TAFS[icao].periodos[index_periodo].condicao = nova_condicao;
   atualizarTabela(icao);
   gerarGrafico();
 }
 
-function gerarGrafico(){
+function gerarGrafico() {
   const div_grafico = document.getElementById('grafico');
   div_grafico.innerHTML = '';
   const view = new View();
   div_grafico.appendChild(view.gerarGrafico(Object.values(TAFS)));
 }
 
-async function init(){
-  const tafs = await getTafsRedemet();
+async function init() {
+  const tafs = await getTafsLspaschoal();
   armazenarTafs(tafs);
   gerarGrafico();
   gerarTabelas();
